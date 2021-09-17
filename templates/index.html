@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <title>Logged in</title>
+</head>
+
+<body>
+
+<h1 class="text-center">Welcome {{user}}</h1>
+<div class="text-center mb-5">
+    <form action="upload" method="post" enctype="multipart/form-data" class="shadow container py-5 mt-5">
+        {% csrf_token %}
+        <input type="file" multiple name="choosefiles">
+        <input type="hidden" name="user" value={{user}}>
+        <button type="submit" class="btn btn-outline-primary">Upload</button>
+    </form>
+    <div class="btn-group">
+        <button class="btn btn-primary mt-5 mx-2"><a class="text-white text-decoration-none" href="logout">Logout</a></button>
+        <button class="btn btn-danger mt-5 mx-2"><a class="text-white text-decoration-none" href="deleteaccount">Delete my account</a></button>
+    </div>
+</div>
+
+<div class="container text-center">
+    <h2>Your Files</h2>
+    <div class="row">
+        {% for file in files %}
+        <div class="col-sm-6">
+            <div class="card my-2">
+                <div class="card-body">
+                    <form action="{% url 'delete' file.pk %}" method="post">
+                        {% csrf_token %}
+                        <h5 class="card-title">{{ file }}</h5>
+                        <a href="media/{{file}}" class="btn btn-primary">View Doc</a>
+                        <button type="button" class="btn btn-secondary"><a href="media/{{ file }}" download class="text-decoration-none text-white">Download</a></button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+
+</html>
